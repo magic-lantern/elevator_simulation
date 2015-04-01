@@ -8,6 +8,7 @@ package simulator;
 import simulator.Floor;
 import simulator.Elevator;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -55,6 +56,30 @@ public class Building {
         for (int i = 0; i < numElevators; i++) {
             elevators.add(new Elevator());
         }
+    }
+    
+    /*
+     if invalid elevator number is passed, assume first elevator
+        probabably would be better to throw exception
+    */
+    public int getElevatorCurrentFloor(int elevatornumber) {
+        if ((elevatornumber <= 0) || (elevatornumber > this.numElevators))
+            elevatornumber = 1;
+    
+        Iterator<Elevator> i = elevators.iterator();
+        while (i.hasNext()) {
+            System.out.println(i.next());
+	}
+        //elevators.get(elevatornumber).label;
+        return 0;        
+    }
+    
+    public String getElevatorCurrentStatus(int elevatornumber) {
+        if ((elevatornumber <= 0) || (elevatornumber > this.numElevators))
+            elevatornumber = 1;
+    
+        System.out.println(elevators.get(elevatornumber).toString());
+        return "";//elevators.get(elevatornumber).toString();
     }
 
 }

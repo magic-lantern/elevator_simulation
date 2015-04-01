@@ -17,10 +17,15 @@ public class Elevator {
         stopped
     }
     State state = State.stopped;
+    String label;
     
     public Elevator() {
         
-    } 
+    }
+    
+    public Elevator(String lbl) {
+        this.label = lbl;
+    }
  
     public void moveUp() {
         state = State.up;
@@ -34,8 +39,18 @@ public class Elevator {
         
     }
     
-    public String toString() {
-        return "Current elevator status: " + this.state.toString();
+    public String getLabel()
+    {
+        return this.label;
     }
-            
+    
+    public void setLabel(String lbl)
+    {
+        this.label = lbl;
+    }
+    
+    public String toString() {
+        return "Elevator " + this.label + " status: " + this.state.toString();
+    }
+    
 }
