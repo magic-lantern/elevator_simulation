@@ -43,18 +43,22 @@ public class Building {
     public void setNumFloors(int n) {
         this.numFloors = n;
 
-        List<Floor> floors = new ArrayList<Floor>();
+        floors = new ArrayList<Floor>();
         for (int i = 1; i <= this.numFloors; i++) {
             floors.add(new Floor(i));
+            System.out.println("Adding floor: " + i);
         }
     }
 
     public void setNumElevators(int n) {
         this.numElevators = n;
 
-        List<Elevator> elevators = new ArrayList<Elevator>();
-        for (int i = 0; i < numElevators; i++) {
-            elevators.add(new Elevator());
+        elevators = new ArrayList<Elevator>();
+        for (int i = 1; i <= numElevators; i++) {
+            // new elevator should have a name or label the same as it's number
+            Elevator e = new Elevator("" + i);
+            elevators.add(e);
+            System.out.println("Adding elevator: " + i);
         }
     }
     
@@ -63,23 +67,49 @@ public class Building {
         probabably would be better to throw exception
     */
     public int getElevatorCurrentFloor(int elevatornumber) {
-        if ((elevatornumber <= 0) || (elevatornumber > this.numElevators))
-            elevatornumber = 1;
+        if ((elevatornumber < 0) || (elevatornumber >= this.numElevators))
+            elevatornumber = 0;
+        
+        return elevators.get(elevatornumber).getFloor();
     
+        /*
         Iterator<Elevator> i = elevators.iterator();
         while (i.hasNext()) {
-            System.out.println(i.next());
+            System.out.println("getElevatorCurrentFloor: " + i.next());
 	}
-        //elevators.get(elevatornumber).label;
-        return 0;        
+        */
     }
     
     public String getElevatorCurrentStatus(int elevatornumber) {
-        if ((elevatornumber <= 0) || (elevatornumber > this.numElevators))
-            elevatornumber = 1;
+        if ((elevatornumber < 0) || (elevatornumber >= this.numElevators))
+            elevatornumber = 0;
     
         System.out.println(elevators.get(elevatornumber).toString());
-        return "";//elevators.get(elevatornumber).toString();
+        return elevators.get(elevatornumber).toString();
+    }
+    
+    // return false if invalid request
+    // return true if valid request
+    public boolean requestFloor(int floor) {
+        Elevator e = elevators.get(0);
+        
+        if (floor < 1 || floor > this.numFloors) {
+            System.out.println("Invalid floor request");
+            return false;
+        }
+        
+        if (floor == e.getFloor()) {
+            return false;
+        }
+        
+        if (e.getState() == Elevator.State.stopped) {
+            if (e.getFloor() < floor) {
+                e.moveUp();
+            }
+            else
+                e.moveDown();
+        }
+        return true;
     }
 
 }

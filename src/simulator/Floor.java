@@ -11,8 +11,9 @@ package simulator;
  */
 public class Floor {
     private int num;
-    private boolean upRequested;
-    private boolean downRequested;
+    private boolean upRequested = false;
+    private boolean downRequested = false;
+    private boolean stopRequested = false;
     
     public Floor() {
         num = 1;
@@ -30,8 +31,16 @@ public class Floor {
         upRequested = true;
     }
     
+    public boolean getUpRequested() {
+        return upRequested;
+    }
+    
     public void requestDown() {
           downRequested = true;
+    }
+    
+    public boolean getDownRequested() {
+        return downRequested;
     }
     
     public void fullfillUp() {
@@ -40,6 +49,18 @@ public class Floor {
     
     public void fullfillDown() {
         downRequested = false;
+    }
+    
+    public void requestStop() {
+        stopRequested = true;
+    }
+    
+    public void fulfillStop() {
+        stopRequested = false;
+    }
+    
+    public boolean getStopRequested() {
+        return stopRequested;
     }
     
     public String toString() {

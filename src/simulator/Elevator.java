@@ -18,6 +18,7 @@ public class Elevator {
     }
     State state = State.stopped;
     String label;
+    int currFloor = 1;
     
     public Elevator() {
         
@@ -49,8 +50,25 @@ public class Elevator {
         this.label = lbl;
     }
     
+    public int getFloor()
+    {
+        return currFloor;
+    }
+    
+    public void setFloor(int floor)
+    {
+        currFloor = floor;
+    }
+    
+    public State getState() {
+        return this.state;
+    }
+    
     public String toString() {
-        return "Elevator " + this.label + " status: " + this.state.toString();
+        if (this.state != State.stopped)
+            return "Elevator '" + this.label + "' currently moving " + this.state.toString();
+        else
+            return "Elevator '" + this.label + "' currently stopped";
     }
     
 }

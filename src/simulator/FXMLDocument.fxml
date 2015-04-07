@@ -9,7 +9,6 @@
 
 <AnchorPane id="AnchorPane" prefHeight="420.0" prefWidth="588.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="simulator.FXMLDocumentController">
     <children>
-        <Button fx:id="button" layoutX="396.0" layoutY="75.0" onAction="#handleButtonAction" text="Don't Click Me!" />
       <GridPane layoutX="268.0" layoutY="237.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -25,20 +24,18 @@
         </rowConstraints>
          <children>
             <Label text="Floor 1" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Button fx:id="floor1Up" mnemonicParsing="false" onAction="#handleFloorBtn" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Floor 2" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="floor2Up" mnemonicParsing="false" onAction="#handleFloorBtn" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="floor2Down" mnemonicParsing="false" onAction="#handleFloorBtn" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Button fx:id="floor3Down" mnemonicParsing="false" onAction="#handleFloorBtn" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button fx:id="floor3Up" mnemonicParsing="false" onAction="#handleFloorBtn" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Floor 3" GridPane.rowIndex="2" />
             <Label text="Floor 4" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" text="Up" GridPane.columnIndex="1" />
+            <Button fx:id="floor4Up" mnemonicParsing="false" onAction="#handleFloorBtn" text="Up" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Floor 5" />
-            <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" text="Down" GridPane.columnIndex="2" />
+            <Button fx:id="floor4Down" mnemonicParsing="false" onAction="#handleFloorBtn" text="Down" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="floor5Down" mnemonicParsing="false" onAction="#handleFloorBtn" text="Down" GridPane.columnIndex="2" />
          </children>
       </GridPane>
       <GridPane layoutX="26.0" layoutY="30.0" prefHeight="90.0" prefWidth="326.0">
@@ -54,7 +51,6 @@
          <children>
             <Label text="Elevator Status:" />
             <Label fx:id="elevatorStatus" GridPane.columnIndex="1" />
-            <Label text="Label" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Label layoutX="330.0" layoutY="184.0" text="Floor Controls">

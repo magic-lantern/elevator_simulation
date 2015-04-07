@@ -26,6 +26,33 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label elevatorStatus;
     
+    @FXML
+    private Button floor1Up;
+    
+    @FXML
+    private Button floor2Up;
+    
+    @FXML
+    private Button floor3Up;
+    
+    @FXML
+    private Button floor4Up;
+    
+    @FXML
+    private Button floor2Down;
+    
+    @FXML
+    private Button floor3Down;
+    
+    @FXML
+    private Button floor4Down;
+    
+    @FXML
+    private Button floor5Down;
+    
+    @FXML
+    private Label currentFloor;
+    
     private Building building;
     
     @FXML
@@ -36,15 +63,41 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleElevatorBtn(ActionEvent event) {
-        Button b = (Button)event.getSource();        
-        b.setStyle("-fx-background-color: #FFFF00;");
-        //elevatorStatus.setText(building.getElevatorCurrentStatus(1));
+        Button b = (Button)event.getSource();
+        
+        if (b.getStyle() == "-fx-background-color: #FFFF00;") {
+            System.out.println("Elevator - canceling floor request to " + b.getText());
+            b.setStyle("");
+            //building.cancelRequestFloor();
+        }
+        else {
+            b.setStyle("-fx-background-color: #FFFF00;");
+            System.out.println("Elevator - " + b.getText() + " floor requested");
+            building.requestFloor(1);
+        }
+
+    }
+    
+    @FXML
+    private void handleFloorBtn(ActionEvent event) {
+        Button b = (Button)event.getSource();
+        
+        if (b.getStyle() == "-fx-background-color: #FFFF00;") {
+            System.out.println(b.getId() + " - canceling " + b.getText() + " call request");
+            b.setStyle("");
+        }
+        else {
+            b.setStyle("-fx-background-color: #FFFF00;");
+            System.out.println(b.getId() + " - " + b.getText() + " call requested");
+        }
     }
         
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        building = new Building();        
+        building = new Building();
+        elevatorStatus.setText(building.getElevatorCurrentStatus(1));
+        currentFloor.setText("" + building.getElevatorCurrentFloor(1));
     }
         
 }
