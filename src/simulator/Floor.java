@@ -67,7 +67,7 @@ public class Floor {
         return stopRequested;
     }
 
-    public void request(Elevator.State s) {
+    public void setRequest(Elevator.State s) {
         if (s == Elevator.State.down) {
             this.requestDown();
         }
@@ -77,6 +77,12 @@ public class Floor {
         else {
             System.out.println("Unknown request recieved" + s);
         }
+    }
+    
+    public boolean requests() {
+        if (this.downRequested || this.stopRequested || this.upRequested)
+            return true;
+        return false;
     }
 
     public String toString() {

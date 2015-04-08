@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -25,6 +26,21 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Label elevatorStatus;
+
+    @FXML
+    private Button elevatorbtn1;
+
+    @FXML
+    private Button elevatorbtn2;
+
+    @FXML
+    private Button elevatorbtn3;
+
+    @FXML
+    private Button elevatorbtn4;
+
+    @FXML
+    private Button elevatorbtn5;
 
     @FXML
     private Button floor1Up;
@@ -63,28 +79,12 @@ public class FXMLDocumentController implements Initializable {
         boolean result = building.requestFloor(Integer.valueOf(b.getText()));
         if (result) {
             // if result is true, elevator moving, update floor
-            b.setStyle("-fx-background-color: #FFFF00;");
             System.out.println("Elevator - #" + b.getText() + " floor requested");
         } else {
             // if result is false, cancel call
-            b.setStyle("");
             System.out.println("Elevator - canceling floor request to " + b.getText());
         }
 
-        /*
-        
-        
-         if (b.getStyle() == "-fx-background-color: #FFFF00;") {
-         System.out.println("Elevator - canceling floor request to " + b.getText());
-         b.setStyle("");
-         //building.cancelRequestFloor();
-         }
-         else {
-         b.setStyle("-fx-background-color: #FFFF00;");
-         System.out.println("Elevator - " + b.getText() + " floor requested");
-         }
-                
-         */
         updateState();
     }
 
@@ -95,11 +95,9 @@ public class FXMLDocumentController implements Initializable {
 
         if (b.getText().toLowerCase().equals("up")) {
             s = Elevator.State.up;
-        }
-        else if (b.getText().toLowerCase().equals("down")) {
+        } else if (b.getText().toLowerCase().equals("down")) {
             s = Elevator.State.down;
-        }
-        else {
+        } else {
             System.out.println("invalid value ***********");
         }
 
@@ -107,41 +105,125 @@ public class FXMLDocumentController implements Initializable {
 
         if (result) {
             // if result is true, elevator requested
-            b.setStyle("-fx-background-color: #FFFF00;");
             System.out.println(b.getId() + " - " + b.getText() + " call requested");
         } else {
             // if result is false, cancel call
-            b.setStyle("");
             System.out.println(b.getId() + " - canceling " + b.getText() + " call request");
         }
-
-        /*
-         if (result) {
-         // if result is true, elevator moving, update floor
-         b.setStyle("-fx-background-color: #FFFF00;");
-         System.out.println("Elevator - #" + b.getText() + " floor requested");
-         }
-         else {    
-         // if result is false, cancel call
-         b.setStyle("");
-         System.out.println("Elevator - canceling floor request to " + b.getText());
-         }
-        
-         if (b.getStyle() == "-fx-background-color: #FFFF00;") {
-         System.out.println(b.getId() + " - canceling " + b.getText() + " call request");
-         b.setStyle("");
-         }
-         else {
-         b.setStyle("-fx-background-color: #FFFF00;");
-         System.out.println(b.getId() + " - " + b.getText() + " call requested");
-         }
-         */
         updateState();
+    }
+
+    @FXML
+    private void runSimulation(ActionEvent event) {
+        Button b = (Button) event.getSource();
+        b.setCursor(Cursor.WAIT);
+        b.getParent().setCursor(Cursor.WAIT);
+        b.setText("Running");
+
+        // separate non-UI thread
+        new Thread() {
+            // runnable for that thread
+            public void run() {
+                do {
+                    //pause for a second to allow user to see changes
+                    //and simulate time for elevator to move
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    threadUpdateUI();
+                } while (building.run());
+
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        b.setText("Run Simulation");
+                        b.setCursor(Cursor.DEFAULT);
+                        b.getParent().setCursor(Cursor.DEFAULT);
+                    }
+                });
+            }
+        }.start();
+    }
+
+    private void threadUpdateUI() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                updateState();     
+            }
+        });
     }
 
     private void updateState() {
         elevatorStatus.setText(building.getElevatorCurrentStatus(1));
         currentFloor.setText("" + (building.getElevatorCurrentFloor(1)));
+
+        if (building.floorUpRequested(1)) {
+            floor1Up.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor1Up.setStyle("");
+        }
+        if (building.floorUpRequested(2)) {
+            floor2Up.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor2Up.setStyle("");
+        }
+        if (building.floorDownRequested(2)) {
+            floor2Down.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor2Down.setStyle("");
+        }
+        if (building.floorUpRequested(3)) {
+            floor3Up.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor3Up.setStyle("");
+        }
+        if (building.floorDownRequested(3)) {
+            floor3Down.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor3Down.setStyle("");
+        }
+        if (building.floorUpRequested(4)) {
+            floor4Up.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor4Up.setStyle("");
+        }
+        if (building.floorDownRequested(4)) {
+            floor4Down.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor4Down.setStyle("");
+        }
+        if (building.floorDownRequested(5)) {
+            floor5Down.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            floor5Down.setStyle("");
+        }
+        if (building.floorStopRequested(1)) {
+            elevatorbtn1.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            elevatorbtn1.setStyle("");
+        }
+        if (building.floorStopRequested(2)) {
+            elevatorbtn2.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            elevatorbtn2.setStyle("");
+        }
+        if (building.floorStopRequested(3)) {
+            elevatorbtn3.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            elevatorbtn3.setStyle("");
+        }
+        if (building.floorStopRequested(4)) {
+            elevatorbtn4.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            elevatorbtn4.setStyle("");
+        }
+        if (building.floorStopRequested(5)) {
+            elevatorbtn5.setStyle("-fx-background-color: #FFFF00;");
+        } else {
+            elevatorbtn5.setStyle("");
+        }
     }
 
     @Override

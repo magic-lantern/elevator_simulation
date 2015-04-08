@@ -73,13 +73,6 @@ public class Building {
         }
 
         return elevators.get(elevatornumber).getFloor();
-
-        /*
-         Iterator<Elevator> i = elevators.iterator();
-         while (i.hasNext()) {
-         System.out.println("getElevatorCurrentFloor: " + i.next());
-         }
-         */
     }
 
     public String getElevatorCurrentStatus(int elevatornumber) {
@@ -140,7 +133,7 @@ public class Building {
         Elevator e = elevators.get(0);
         boolean returnStatus = true;
 
-        floors.get(floor - 1).request(s);
+        floors.get(floor - 1).setRequest(s);
         if (e.getState() == Elevator.State.stopped) {
             if (log) {
                 System.out.println("Valid request logged.");
@@ -167,8 +160,71 @@ public class Building {
         return returnStatus;
     }
 
+    public boolean floorUpRequested(int floor) {
+        return floors.get(floor - 1).getUpRequested();
+    }
+
+    public boolean floorDownRequested(int floor) {
+        return floors.get(floor - 1).getDownRequested();
+    }
+
+    public boolean floorStopRequested(int floor) {
+        return floors.get(floor - 1).getStopRequested();
+    }
+
+    public boolean run() {
+        Elevator e = elevators.get(0);
+        int currFloor = e.getFloor();
+        boolean returnStatus = false;
+        
+        System.out.println(" ----- ----- Current Floor: " + currFloor);
+
+        // clear any stop requests for current floor first
+        floors.get(e.getFloor() - 1).fulfillStop();
+        
+        // if elevator moving, move one floor and update state
+        if (e.getState() == Elevator.State.up) {
+            floors.get(e.getFloor() - 1).fullfillUp();
+            if (currFloor >= 5) {
+                floors.get(e.getFloor() - 1).fullfillDown();
+                e.stop();
+            } else {
+                e.setFloor(currFloor + 1);
+            }
+        }
+        if (e.getState() == Elevator.State.down) {
+            floors.get(e.getFloor() - 1).fullfillDown();
+            if (currFloor <= 1) {
+                floors.get(e.getFloor() - 1).fullfillUp();
+                e.stop();
+            } else {
+                e.setFloor(currFloor - 1);
+            }
+        }
+
+        //if additional requests present, return true
+        //        otherwise, return false;
+        //need to step through each floor and look for requests in current direction
+        // if no requests in current direction, check for requests in other direction
+        // if requests in other direction, change direction.
+        for (Floor f : floors) {
+            if (f.requests()) {
+                returnStatus = true;
+                if (f.getFloorNumber() < currFloor) {
+                    e.moveDown();
+                }
+                if (f.getFloorNumber() > currFloor) {
+                    e.moveUp();
+                }                    
+                break;
+            }
+        }
+
+        return returnStatus;
+    }
+
     public void testStartFloor(int floor) {
-        System.out.println("Manually setting elevator floor to: " + floor);
+        System.out.println("Manually setting elevator to floor: " + floor);
         Elevator e = elevators.get(0);
         e.setFloor(floor);
     }
@@ -178,6 +234,7 @@ public class Building {
         while (i.hasNext()) {
             System.out.println(i.next());
         }
+        System.out.println(elevators.get(0).toString());
     }
 
 }

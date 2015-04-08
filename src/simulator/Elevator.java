@@ -36,10 +36,10 @@ public class Elevator {
         state = State.down;
     }
     
-    public void requestFloor(int f) {
-        
+    public void stop() {
+        state = State.stopped;
     }
-    
+        
     public String getLabel()
     {
         return this.label;
@@ -66,9 +66,9 @@ public class Elevator {
     
     public String toString() {
         if (this.state != State.stopped)
-            return "Elevator '" + this.label + "' currently moving " + this.state.toString();
+            return "Elevator '" + this.label + "' on floor " + this.currFloor + " and is currently moving " + this.state.toString();
         else
-            return "Elevator '" + this.label + "' currently stopped";
+            return "Elevator '" + this.label + "' on floor " + this.currFloor + " and is currently stopped";
     }
     
 }
