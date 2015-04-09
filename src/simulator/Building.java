@@ -172,16 +172,40 @@ public class Building {
         return floors.get(floor - 1).getStopRequested();
     }
 
+    /**
+     * Move the elevator.
+     *
+     * @return <tt>true</tt> if there are additional requests
+     */
     public boolean run() {
         Elevator e = elevators.get(0);
         int currFloor = e.getFloor();
         boolean returnStatus = false;
-        
+
         System.out.println(" ----- ----- Current Floor: " + currFloor);
 
         // clear any stop requests for current floor first
         floors.get(e.getFloor() - 1).fulfillStop();
-        
+
+        //if additional requests present, return true
+        //        otherwise, return false;
+        //step through each floor and look for requests, then start moving in that direction
+        for (Floor f : floors) {
+            if (f.requests()) {
+                returnStatus = true;
+                if (f.getFloorNumber() < currFloor) {
+                    e.moveDown();
+                }
+                if (f.getFloorNumber() > currFloor) {
+                    e.moveUp();
+                }
+                break;
+            }
+        }
+        if (!returnStatus) {
+            e.stop();
+        }
+
         // if elevator moving, move one floor and update state
         if (e.getState() == Elevator.State.up) {
             floors.get(e.getFloor() - 1).fullfillUp();
@@ -202,39 +226,32 @@ public class Building {
             }
         }
 
-        //if additional requests present, return true
-        //        otherwise, return false;
-        //need to step through each floor and look for requests in current direction
-        // if no requests in current direction, check for requests in other direction
-        // if requests in other direction, change direction.
-        for (Floor f : floors) {
-            if (f.requests()) {
-                returnStatus = true;
-                if (f.getFloorNumber() < currFloor) {
-                    e.moveDown();
-                }
-                if (f.getFloorNumber() > currFloor) {
-                    e.moveUp();
-                }                    
-                break;
-            }
-        }
-
         return returnStatus;
     }
 
+    /**
+     * Set the starting floor of the Elevator. Default is to start at Floor 1
+     *
+     * @param floor must be a valid floor (based on first floor is 1)
+     */
     public void testStartFloor(int floor) {
         System.out.println("Manually setting elevator to floor: " + floor);
         Elevator e = elevators.get(0);
         e.setFloor(floor);
     }
 
+    /**
+     * Output status of all floors and elevators
+     */
     public void showStatus() {
-        Iterator<Floor> i = floors.iterator();
-        while (i.hasNext()) {
-            System.out.println(i.next());
+        Iterator<Floor> fi = floors.iterator();
+        while (fi.hasNext()) {
+            System.out.println(fi.next());
         }
-        System.out.println(elevators.get(0).toString());
+        Iterator<Elevator> ei = elevators.iterator();
+        while (ei.hasNext()) {
+            System.out.println(ei.next());
+        }
     }
 
 }
